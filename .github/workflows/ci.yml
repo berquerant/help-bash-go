@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  BIN: ${GITHUB_WORKSPACE}/dist/help-bash
+
+jobs:
+  build:
+    timeout-minutes: 1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version:
+          - "1.19"
+    steps:
+      - name: Describe Github Event Path
+        run: cat $GITHUB_EVENT_PATH
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache: true
+      - name: Display Go version
+        run: go version
+      - name: build
+        run: bin/build.sh $BIN
+      - name: test
+        run: bin/test.sh $BIN
