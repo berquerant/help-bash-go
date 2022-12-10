@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  BIN: ${GITHUB_WORKSPACE}/dist/help-bash
+  BIN: /tmp/help-bash
 
 jobs:
   build:
